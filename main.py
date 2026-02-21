@@ -1,9 +1,17 @@
 from fastapi import FastAPI
 from mem0 import Memory
+import os
 
 app = FastAPI(title="Mem0 Service")
 
-memory = Memory()
+memory = Memory.from_config({
+    "vector_store": {
+        "provider": "qdrant",
+        "config": {
+            "url": os.getenv("QDRANT_URL", "http://qdrant:6333"),
+        },
+    }
+})
 
 @app.get("/")
 def health():
